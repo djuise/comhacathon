@@ -9,10 +9,9 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 class GetSteps {
-    static List<String> getStringSteps(String fileName, String folderName) {
+    static List<String> getStringSteps(String fileName) {
         String defaultFolder = "scenarios/";
-        String folder = folderName == null ? "" : folderName;
-        String path = defaultFolder + folder + fileName + ".sc";
+        String path = defaultFolder + fileName + ".sc";
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         List<String> steps = new LinkedList<>();
 
@@ -25,9 +24,5 @@ class GetSteps {
         }
 
         return steps;
-    }
-
-    static List<String> getStringSteps(String fileName) {
-        return getStringSteps(fileName, null);
     }
 }
