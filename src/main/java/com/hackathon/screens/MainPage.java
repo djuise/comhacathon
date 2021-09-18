@@ -6,8 +6,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 public class MainPage extends BaseScreen {
+
     public MainPage(WebDriver driver) {
-        super(driver);
+            super(driver);
     }
 
     @FindBy(id = "js-site-search-input")
