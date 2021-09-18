@@ -14,9 +14,4 @@ public class RunTests
     public static void main( String[] args ) {
         new Runner().run(1, Arrays.asList("test"), Arrays.asList(ScTest.class));
     }
-
-
-
-
-
 }
