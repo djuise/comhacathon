@@ -1,28 +1,27 @@
 package com.hackathon.runner;
 
+import com.hackathon.helpers.BaseTest;
 import com.hackathon.runner.annotations.AfterTestImpl;
-import org.openqa.selenium.WebDriver;
+import com.hackathon.runner.annotations.BeforeTestImpl;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Runner {
 
-    public void run(int threads, List<String> scenariosPath, List<Class> stepsClasses) {
-        for (String scenarioPath: scenariosPath) {
-            List<String> steps = GetSteps.getStringSteps(scenarioPath);
-            run(steps, stepsClasses);
-        }
+    public <T extends BaseTest> void run(T test) {
+        List<String> steps = GetSteps.getStringSteps(test.scenario);
+        BeforeTestImpl.setUp(test.getClass());
+        run(steps, test.classesList);
+        AfterTestImpl.tearDown(test.getClass());
     }
 
     private void run(List<String> steps, List<Class> stepsClasses) {
         List<Step> stepList = new FindSteps().getSteps(steps, stepsClasses);
-        for (Step step: stepList) {
+        for (Step step : stepList) {
             try {
                 runWithArguments(step);
-//                AfterTestImpl.tearDown(step.getClazz());
             } catch (IllegalAccessException | InvocationTargetException | InstantiationException e) {
                 e.printStackTrace();
                 Thread.currentThread().interrupt();
@@ -36,7 +35,7 @@ public class Runner {
         int intCounter = 0;
         List<Object> paramsList = new LinkedList<>();
         Class<?>[] paramsCount = step.getMethod().getParameterTypes();
-        for (Class clazz: paramsCount) {
+        for (Class clazz : paramsCount) {
             if (clazz.getTypeName().equals(String.class.getTypeName())) {
                 paramsList.add(step.getStringVars().get(stringCounter));
                 stringCounter++;

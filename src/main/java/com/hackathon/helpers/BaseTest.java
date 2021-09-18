@@ -1,41 +1,27 @@
 package com.hackathon.helpers;
 
-import com.hackathon.runner.annotations.AfterTest;
-import com.hackathon.runner.annotations.BeforeTest;
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 
-public class BaseTest {
-    protected static WebDriver driver;
-    private static BaseTest baseTest = null;
+import java.util.List;
 
-    public BaseTest() {
-        if (baseTest == null) {
-            setUp();
-            baseTest = this;
-        }
+public class BaseTest extends TestConfig {
+    public String scenario;
+    public List<Class> classesList;
+    public WebDriver driver;
+
+    public BaseTest(String scenario, List<Class> classesList) {
+        this.scenario = scenario;
+        this.classesList = classesList;
+        this.driver = TestConfig.driver.get();
     }
 
-    @BeforeTest
-    public void setUp() {
-        WebDriverManager.chromedriver().setup();
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--ignore-ssl-errors=yes", "--ignore-certificate-errors");
-        driver = new ChromeDriver(options);
-        driver.get("https://apparel-uk.local:9002/ucstorefront/en/");
-        driver.manage().window().maximize();
+    public BaseTest(String scenario, List<Class> classesList, String folder) {
+        this.scenario = folder + scenario;
+        this.classesList = classesList;
     }
 
-    @AfterTest
-    public void tearDown() {
-        driver.close();
-    }
 
-    @Override
-    protected void finalize() throws Throwable {
-        driver.close();
-        super.finalize();
+    public void test() {
+        System.out.println("ASD");
     }
 }
