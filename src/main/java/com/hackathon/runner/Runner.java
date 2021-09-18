@@ -1,9 +1,6 @@
 package com.hackathon.runner;
 
-import javafx.util.Pair;
-
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -11,24 +8,45 @@ public class Runner {
 
     public void run(int threads, List<String> scenariosPath, List<Class> stepsClasses) {
         for (String scenarioPath: scenariosPath) {
-            List<String> steps = GetSteps.getSteps(scenarioPath);
+            List<String> steps = GetSteps.getStringSteps(scenarioPath);
             run(steps, stepsClasses);
         }
     }
 
     private void run(List<String> steps, List<Class> stepsClasses) {
-        List<Pair<Method, Class>> methodList = new LinkedList<>();
-        for(String step: steps) {
-            methodList.add(FindSteps.getActionStep(step, stepsClasses));
-        }
 
-        for (Pair<Method, Class> entry: methodList) {
+
+        List<Step> stepList = new FindSteps().getSteps(steps, stepsClasses);
+
+        for (Step step: stepList) {
             try {
-                entry.getKey().invoke(entry.getValue().newInstance());
+                runWithArguments(step);
             } catch (IllegalAccessException | InvocationTargetException | InstantiationException e) {
                 e.printStackTrace();
                 Thread.currentThread().interrupt();
             }
         }
+    }
+
+    private void runWithArguments(Step step) throws IllegalAccessException, InstantiationException, InvocationTargetException {
+        int stringCounter = 0;
+        int doubleCounter = 0;
+        int intCounter = 0;
+        List<Object> paramsList = new LinkedList<>();
+        Class<?>[] paramsCount = step.getMethod().getParameterTypes();
+        for (Class clazz: paramsCount) {
+            if (clazz.getTypeName().equals(String.class.getTypeName())) {
+                paramsList.add(step.getStringVars().get(stringCounter));
+                stringCounter++;
+            } else if (clazz.getTypeName().equals(double.class.getTypeName())) {
+                paramsList.add(step.getDoubleVars().get(doubleCounter));
+                doubleCounter++;
+            } else if (clazz.getTypeName().equals(int.class.getTypeName())) {
+                paramsList.add(step.getIntVars().get(intCounter));
+                intCounter++;
+            }
+        }
+
+        step.getMethod().invoke(step.getClazz().newInstance(), paramsList.toArray());
     }
 }

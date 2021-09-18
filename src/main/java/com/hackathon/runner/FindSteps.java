@@ -9,22 +9,58 @@ import java.util.List;
 
 class FindSteps {
 
-    static Pair<Method, Class> getActionStep(String stepname, List<Class> clazz) {
+    private static final String ACTION = "Action: ";
+    private static final String CHECK = "Check: ";
+    private String prefix = null;
+    private List<Class> classes;
+    private Step step = null;
+
+    List<Step> getSteps(List<String> stepsNames, List<Class> classes) {
+        List<Step> stepsList = new LinkedList<>();
+        for(String step: stepsNames) {
+            stepsList.add(getStep(step, classes));
+        }
+
+        return stepsList;
+    }
+
+    private Step getStep(String stepName, List<Class> classes) {
+        this.classes = classes;
+        setPrefix(stepName);
+        String stepWithoutPrefix = splitStepName(stepName);
+        step = new StepBuilder().getStepObj(stepWithoutPrefix);
+        List<Pair<Method, Class>> pairStepList = getMethods();
+
+        if (prefix == null) {
+            Exception e = new Exception("Step \"" + stepName + "\" has wrong start.");
+            e.printStackTrace();
+            Thread.currentThread().interrupt();
+        }
+
+        assert pairStepList != null;
+
+        checkCountOfMethods(pairStepList, step.getName());
+
+        step.setMethod(pairStepList.get(0).getKey());
+        step.setClazz(pairStepList.get(0).getValue());
+
+        return step;
+    }
+
+    private List<Pair<Method, Class>> getActionStep() {
         Class<Action> annotation = Action.class;
-        String step = getStepName(stepname);
         List<Pair<Method, Class>> methodList = new LinkedList<>();
-        List<Pair<Method, Class>> actionStepsMethods = getMethodsWithAnnotation(clazz, annotation);
+        List<Pair<Method, Class>> actionStepsMethods = getMethodsWithAnnotation(classes, annotation);
         for(Pair<Method, Class> entry: actionStepsMethods) {
-            if (entry.getKey().getAnnotation(annotation).value().equals(step)) {
+            if (entry.getKey().getAnnotation(annotation).value().equals(step.getName())) {
                 methodList.add(new Pair<>(entry.getKey(), entry.getValue()));
             }
         }
-        checkCountOfMethods(methodList, step);
 
-        return methodList.get(0);
+        return methodList;
     }
 
-    private static <T extends Annotation> List<Pair<Method, Class>> getMethodsWithAnnotation(List<Class> clazzs, Class<T> annotation) {
+    private <T extends Annotation> List<Pair<Method, Class>> getMethodsWithAnnotation(List<Class> clazzs, Class<T> annotation) {
         List<Pair<Method, Class>> methodList = new LinkedList<>();
         for (Class clazz: clazzs) {
             methodList.addAll(getMethodsWithAnnotation(clazz, annotation));
@@ -33,7 +69,7 @@ class FindSteps {
         return methodList;
     }
 
-    private static <T extends Annotation>List<Pair<Method, Class>> getMethodsWithAnnotation(Class clazz, Class<T> annotation) {
+    private <T extends Annotation>List<Pair<Method, Class>> getMethodsWithAnnotation(Class clazz, Class<T> annotation) {
         List<Pair<Method, Class>> methodList = new LinkedList<>();
         for (Method method: clazz.getDeclaredMethods()) {
             if (method.isAnnotationPresent(annotation) && method.getAnnotation(annotation).annotationType().equals(annotation)) {
@@ -44,7 +80,7 @@ class FindSteps {
         return methodList;
     }
 
-    private static void checkCountOfMethods(List<Pair<Method, Class>> methodList, String step) {
+    private void checkCountOfMethods(List<Pair<Method, Class>> methodList, String step) {
         if (methodList.size() == 0) {
             Exception e = new Exception("Step \"" + step + "\" not found.");
             e.printStackTrace();
@@ -59,25 +95,30 @@ class FindSteps {
         }
     }
 
-    private static String getStepName(String step) {
-        String action = "Action: ";
-        String removedPart = null;
-        if (step.startsWith(action)) {
-            removedPart = action;
-        }
-
-        if (removedPart == null) {
-            Exception e = new Exception("Step \"" + step + "\" has wrong start.");
-            e.printStackTrace();
-            Thread.currentThread().interrupt();
-        }
-
-        return splitStepName(step, removedPart);
-    }
-
-    private static String splitStepName(String step, String removedSubstring) {
-        int removedPosition = step.indexOf(removedSubstring) + removedSubstring.length();
+    private String splitStepName(String step) {
+        int removedPosition = step.indexOf(prefix) + prefix.length();
 
         return step.substring(removedPosition);
+    }
+
+    private void setPrefix(String stepName) {
+        if (stepName.startsWith(ACTION)) {
+            prefix = ACTION;
+        } else if (stepName.startsWith(CHECK)) {
+            prefix = CHECK;
+        }
+    }
+
+    private List<Pair<Method, Class>> getMethods() {
+        List<Pair<Method, Class>> pairList = null;
+        switch (prefix) {
+            case ACTION:
+                pairList = getActionStep();
+                break;
+            case CHECK:
+                break;
+        }
+
+        return pairList;
     }
 }
