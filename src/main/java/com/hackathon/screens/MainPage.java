@@ -13,4 +13,6 @@ public class MainPage extends BaseScreen {
 
     @FindBy(id = "js-site-search-input")
     public WebElement searchField;
+    @FindBy (xpath = "//a[@href='/ucstorefront/en/login']")
+    public WebElement SignInBtn;
 }
