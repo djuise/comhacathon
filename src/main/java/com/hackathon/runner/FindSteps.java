@@ -1,6 +1,7 @@
 package com.hackathon.runner;
 
 import com.hackathon.runner.annotations.Action;
+import com.hackathon.runner.annotations.Check;
 import javafx.util.Pair;
 
 import java.lang.annotation.Annotation;
@@ -50,6 +51,19 @@ class FindSteps {
 
     private List<Pair<Method, Class>> getActionStep() {
         Class<Action> annotation = Action.class;
+        List<Pair<Method, Class>> methodList = new LinkedList<>();
+        List<Pair<Method, Class>> actionStepsMethods = getMethodsWithAnnotation(classes, annotation);
+        for(Pair<Method, Class> entry: actionStepsMethods) {
+            if (entry.getKey().getAnnotation(annotation).value().equals(step.getName())) {
+                methodList.add(new Pair<>(entry.getKey(), entry.getValue()));
+            }
+        }
+
+        return methodList;
+    }
+
+    private List<Pair<Method, Class>> getCheckStep() {
+        Class<Check> annotation = Check.class;
         List<Pair<Method, Class>> methodList = new LinkedList<>();
         List<Pair<Method, Class>> actionStepsMethods = getMethodsWithAnnotation(classes, annotation);
         for(Pair<Method, Class> entry: actionStepsMethods) {
@@ -117,6 +131,7 @@ class FindSteps {
                 pairList = getActionStep();
                 break;
             case CHECK:
+                pairList = getCheckStep();
                 break;
         }
 
