@@ -1,5 +1,9 @@
 package com.hackathon.runner;
 
+import com.hackathon.runner.annotations.AfterTestImpl;
+import org.openqa.selenium.WebDriver;
+
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,13 +18,11 @@ public class Runner {
     }
 
     private void run(List<String> steps, List<Class> stepsClasses) {
-
-
         List<Step> stepList = new FindSteps().getSteps(steps, stepsClasses);
-
         for (Step step: stepList) {
             try {
                 runWithArguments(step);
+//                AfterTestImpl.tearDown(step.getClazz());
             } catch (IllegalAccessException | InvocationTargetException | InstantiationException e) {
                 e.printStackTrace();
                 Thread.currentThread().interrupt();

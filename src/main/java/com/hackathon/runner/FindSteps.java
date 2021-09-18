@@ -1,5 +1,6 @@
 package com.hackathon.runner;
 
+import com.hackathon.runner.annotations.Action;
 import javafx.util.Pair;
 
 import java.lang.annotation.Annotation;

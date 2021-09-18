@@ -1,7 +1,7 @@
 package com.hackathon.steps;
 
-import com.hackathon.runner.Action;
-import com.hackathon.runner.BaseTest;
+import com.hackathon.helpers.BaseTest;
+import com.hackathon.runner.annotations.Action;
 
 public class ScTest extends BaseTest {
 
