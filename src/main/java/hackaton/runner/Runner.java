@@ -5,9 +5,6 @@ import hackaton.Logger.Logger;
 import hackaton.helpers.BaseTest;
 import hackaton.runner.annotations.AfterTestImpl;
 import hackaton.runner.annotations.BeforeTestImpl;
-import hackaton.runner.exeptions.StepNotFoundException;
-import lombok.Getter;
-import lombok.SneakyThrows;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
@@ -26,31 +23,33 @@ public class Runner<T extends BaseTest> implements Runnable {
 
     @Override
     public void run() {
-        logger.info("Test started: " + test.getClass().getName());
-        try {
-            runTest();
-        } catch (StepNotFoundException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
-            logger.error("Test failed: " + test.getClass().getName());
-            e.printStackTrace();
-        }
-
+        logger.info("Test started: " + test.getScenario());
+        runTest();
         AfterTestImpl.tearDown(test.getClass());
-        logger.info("Test passed: " + test.getClass().getName());
+        logger.info("Test passed: " + test.getScenario());
     }
 
-    private void runTest() throws StepNotFoundException, IllegalAccessException, InstantiationException, InvocationTargetException {
-        List<Step> stepList = new FindSteps().getSteps(steps, test.getClassesList(), test.getScenario());
-        BeforeTestImpl.setUp(test.getClass());
-        runTest(stepList);
+    private void runTest() {
+        try {
+            List<Step> stepList = new FindSteps().getSteps(steps, test.getClassesList(), test.getScenario());
+            BeforeTestImpl.setUp(test.getClass());
+            runTest(stepList);
+        } catch (Exception e) {
+            ParallelRunner.status.set(1);
+            Thread.currentThread().interrupt();
+            logger.error("Failed: " + test.getScenario());
+            e.printStackTrace();
+            AfterTestImpl.tearDown(test.getClass());
+        }
     }
 
-    private void runTest(List<Step> stepList) throws IllegalAccessException, InvocationTargetException, InstantiationException {
+    private void runTest(List<Step> stepList) throws Exception {
         for (Step step : stepList) {
             runWithArguments(step);
         }
     }
 
-    private void runWithArguments(Step step) throws IllegalAccessException, InstantiationException, InvocationTargetException {
+    private void runWithArguments(Step step) throws Exception {
         int stringCounter = 0;
         int doubleCounter = 0;
         int intCounter = 0;
