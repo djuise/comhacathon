@@ -39,7 +39,6 @@ public class Runner<T extends BaseTest> implements Runnable {
             logger.error("Failed: " + test.getScenario());
             e.printStackTrace();
             AfterTestImpl.tearDown(test.getClass());
-            logger.info("Test passed: " + test.getScenario());
             System.exit(1);
         }
     }
