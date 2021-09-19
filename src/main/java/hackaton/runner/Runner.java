@@ -36,7 +36,7 @@ public class Runner<T extends BaseTest> implements Runnable {
             logger.info("Test passed: " + test.getScenario());
         } catch (Exception e) {
             Thread.currentThread().interrupt();
-            logger.error("Failed: " + test.getScenario());
+            logger.error("Test ailed: " + test.getScenario());
             e.printStackTrace();
             status = 1;
         }
