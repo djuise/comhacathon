@@ -6,6 +6,7 @@ import hackaton.helpers.BaseTest;
 import hackaton.runner.annotations.AfterTestImpl;
 import hackaton.runner.annotations.BeforeTestImpl;
 import hackaton.runner.exeptions.StepNotFoundException;
+import lombok.Getter;
 import lombok.SneakyThrows;
 
 import java.lang.reflect.InvocationTargetException;
@@ -23,11 +24,16 @@ public class Runner<T extends BaseTest> implements Runnable {
         steps = GetSteps.getStringSteps(test.getScenario());
     }
 
-    @SneakyThrows
     @Override
     public void run() {
         logger.info("Test started: " + test.getClass().getName());
-        runTest();
+        try {
+            runTest();
+        } catch (StepNotFoundException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
+            logger.error("Test failed: " + test.getClass().getName());
+            e.printStackTrace();
+        }
+
         AfterTestImpl.tearDown(test.getClass());
         logger.info("Test passed: " + test.getClass().getName());
     }

@@ -27,7 +27,7 @@ public class ParallelRunner {
                     String className = arguments.classList.get(i);
                     arguments.classList.remove(className);
                     BaseTest clazz = (BaseTest) Class.forName(className).newInstance();
-                    Runnable runnable = new Runner<>(clazz);
+                    Runner runnable = new Runner<>(clazz);
                     Thread thread = new Thread(runnable);
                     threadList.add(thread);
                 } catch (Exception e) {
