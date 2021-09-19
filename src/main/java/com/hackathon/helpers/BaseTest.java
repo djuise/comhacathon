@@ -21,8 +21,8 @@ public class BaseTest extends TestConfig {
         this.classesList = classesList;
     }
 
-    @AfterTest
-    public void tearDown() {
-        driver.close();
+    public BaseTest(String scenario, List<Class> classesList, String folder) {
+        this.scenario = folder + scenario;
+        this.classesList = classesList;
     }
 }

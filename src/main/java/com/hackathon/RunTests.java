@@ -13,5 +13,6 @@ public class RunTests
     public static void main( String[] args ) {
        // new Runner().run(new RunNegativeLoginTest());
         new Runner().run(new RunBannerTest());
+        new Runner().run(new RunFirstTest());
     }
 }
