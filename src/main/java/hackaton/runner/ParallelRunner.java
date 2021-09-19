@@ -15,6 +15,7 @@ public class ParallelRunner {
     }
 
     private void run(Arguments arguments) {
+        int status = 0;
         List<Thread> threadList = new ArrayList<>();
         while (arguments.classList.size() > 0) {
             int countOfThreads = arguments.getThreadCount() < arguments.classList.size() ? arguments.getThreadCount() : arguments.classList.size();
@@ -27,6 +28,7 @@ public class ParallelRunner {
                     Thread thread = new Thread(runnable);
                     threadList.add(thread);
                 } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+                    status = 1;
                     e.printStackTrace();
                 }
             }
@@ -38,9 +40,10 @@ public class ParallelRunner {
                 for (Thread thread: threadList)
                     thread.join();
             } catch (InterruptedException e) {
+                status = 1;
                 e.printStackTrace();
             }
         }
-//        System.exit(0);
+        System.exit(status);
     }
 }
