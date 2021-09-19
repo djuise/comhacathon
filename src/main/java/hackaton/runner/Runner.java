@@ -35,11 +35,12 @@ public class Runner<T extends BaseTest> implements Runnable {
             BeforeTestImpl.setUp(test.getClass());
             runTest(stepList);
         } catch (Exception e) {
-            ParallelRunner.status.set(1);
             Thread.currentThread().interrupt();
             logger.error("Failed: " + test.getScenario());
             e.printStackTrace();
             AfterTestImpl.tearDown(test.getClass());
+            logger.info("Test passed: " + test.getScenario());
+            System.exit(1);
         }
     }
 
