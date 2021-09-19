@@ -8,10 +8,12 @@ import hackaton.screens.SignInPage;
 
 public class SignInPageSteps extends TestConfig {
 
+    private SignInPage signInPage = new SignInPage();
+
     @SuppressWarnings({"unused", "using for steps"})
     @Action("Input email {string} and password {string}")
     public void inputValidCreds(String a, String b){
-        SignInPage signInPage = new SignInPage(driver.get());
+        SignInPage signInPage = new SignInPage();
         signInPage.getSignInEmailField().sendKeys(a);
         signInPage.getSignInPasswordField().sendKeys(b);
     }
@@ -19,7 +21,7 @@ public class SignInPageSteps extends TestConfig {
     @SuppressWarnings({"unused", "using for steps"})
     @Action("click on Log In button")
     public void logInBtnClick() {
-        SignInPage signInPage = new SignInPage(driver.get());
+        SignInPage signInPage = new SignInPage();
         signInPage.getSignInBtn().click();
 
     }
@@ -28,7 +30,7 @@ public class SignInPageSteps extends TestConfig {
     @Check("sign in error is displayed")
     public void validationErrorIsDisplayed() {
         Logger log = new Logger();
-        SignInPage signInPage = new SignInPage(driver.get());
+        SignInPage signInPage = new SignInPage();
         if (signInPage.getSignInError().isDisplayed()) {
             log.info("Validation error is displayed");
         } else {

@@ -5,15 +5,18 @@ import hackaton.helpers.TestConfig;
 import hackaton.runner.annotations.Action;
 import hackaton.runner.annotations.Check;
 import hackaton.screens.MainPage;
+import hackaton.screens.SignInPage;
 import org.openqa.selenium.WebElement;
 
 public class MainPageSteps extends TestConfig {
+
+    private MainPage mainPage = new MainPage();
 
     @SuppressWarnings({"unused", "using for steps"})
     @Action("click on Sign in button")
     public void navigateToSignInPage() {
         Logger log = new Logger();
-        MainPage mainPage = new MainPage(driver.get());
+        MainPage mainPage = new MainPage();
         mainPage.getSignInBtn().click();
         log.info("Login page is opened");
     }
@@ -21,7 +24,7 @@ public class MainPageSteps extends TestConfig {
     @SuppressWarnings({"unused", "using for steps"})
     @Check("account's header is displayed")
     public void accountsHeaderIsDisplayed() {
-        MainPage mainPage = new MainPage(driver.get());
+        MainPage mainPage = new MainPage();
         Logger log = new Logger();
         if(mainPage.getMyAccountBtn().isDisplayed()){
             log.info("User is logged in successfully");
@@ -33,7 +36,7 @@ public class MainPageSteps extends TestConfig {
     @SuppressWarnings({"unused", "using for steps"})
     @Action("Get all banners on Main page")
     public void getAllBanners() {
-        MainPage mainPage = new MainPage(driver.get());
+        MainPage mainPage = new MainPage();
         Logger log = new Logger();
         int bannersAmount = mainPage.getBanners().size();
         log.info("There are " + bannersAmount + " banners on the Main page");
@@ -42,7 +45,7 @@ public class MainPageSteps extends TestConfig {
     @SuppressWarnings({"unused", "using for steps"})
     @Check("All banners are displayed and clickable")
     public void bannersAreDisplayedAndClickable() {
-        MainPage mainPage = new MainPage(driver.get());
+        MainPage mainPage = new MainPage();
         Logger log = new Logger();
         int count = 1;
         for(WebElement e: mainPage.getBanners()){

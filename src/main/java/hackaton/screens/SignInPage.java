@@ -7,10 +7,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 public class SignInPage extends BaseScreen {
-    public SignInPage(WebDriver driver) {
-        super(driver);
-    }
-
     @Getter
     @FindBy(id = "j_username")
     private WebElement signInEmailField;
