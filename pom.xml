@@ -4,12 +4,11 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.hackathon</groupId>
+  <groupId>hackathon</groupId>
   <artifactId>RunTests</artifactId>
   <version>1</version>
 
-  <name>com.hackathon</name>
-  <!-- FIXME change it to the project's website -->
+  <name>hackathon</name>
   <url>http://www.example.com</url>
 
   <properties>
@@ -17,36 +16,6 @@
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
-
-    <profiles>
-        <profile>
-            <id>run-tests</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>exec-maven-plugin</artifactId>
-                        <version>1.1.1</version>
-                        <executions>
-                            <execution>
-                                <phase>test</phase>
-                                <goals>
-                                    <goal>java</goal>
-                                </goals>
-                                <configuration>
-                                    <mainClass>com.hackathon.RunTests</mainClass>
-                                    <arguments>
-                                        <argument>tests.RunFirstTest</argument>
-                                        <argument>tests.RunFirstTest2</argument>
-                                    </arguments>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 
     <dependencies>
     <dependency>
