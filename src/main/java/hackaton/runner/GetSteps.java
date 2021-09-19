@@ -22,13 +22,8 @@ class GetSteps {
         String path = defaultFolder + fileName + SCENARIO_EXTENSION;
         List<String> steps = new LinkedList<>();
 
-//        try {
-            ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-            try (Stream<String> stream = Files.lines(Paths.get(Objects.requireNonNull(classLoader.getResource(path)).getPath()))) {
-//            System.out.println("PATH1: " + path);
-//            URI uri = ClassLoader.getSystemResource(path).toURI();
-//            Path filePath = Paths.get(uri);
-//            Stream<String> stream = Files.lines(filePath);
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        try (Stream<String> stream = Files.lines(Paths.get(Objects.requireNonNull(classLoader.getResource(path)).getPath()))) {
             stream.forEach(steps::add);
         } catch (IOException | NullPointerException e) {
             new Logger().error("Step with name " + path + " not found.");
