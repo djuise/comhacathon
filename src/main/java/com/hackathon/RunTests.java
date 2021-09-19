@@ -1,7 +1,8 @@
 package com.hackathon;
 
 import com.hackathon.runner.Runner;
-import com.hackathon.tests.RunFirstTest;
+import com.hackathon.tests.RunBannerTest;
+import com.hackathon.tests.RunNegativeLoginTest;
 
 /**
  * Hello world!
@@ -10,6 +11,8 @@ import com.hackathon.tests.RunFirstTest;
 public class RunTests
 {
     public static void main( String[] args ) {
+       // new Runner().run(new RunNegativeLoginTest());
+        new Runner().run(new RunBannerTest());
         new Runner().run(new RunFirstTest());
     }
 }

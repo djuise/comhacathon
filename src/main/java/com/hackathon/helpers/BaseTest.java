@@ -1,5 +1,6 @@
 package com.hackathon.helpers;
 
+import com.hackathon.runner.annotations.AfterTest;
 import org.openqa.selenium.WebDriver;
 
 import java.util.List;
@@ -20,8 +21,8 @@ public class BaseTest extends TestConfig {
         this.classesList = classesList;
     }
 
-
-    public void test() {
-        System.out.println("ASD");
+    public BaseTest(String scenario, List<Class> classesList, String folder) {
+        this.scenario = folder + scenario;
+        this.classesList = classesList;
     }
 }
