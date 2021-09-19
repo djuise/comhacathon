@@ -18,6 +18,7 @@ public class TestConfig extends SeleniumConfiguration {
     @BeforeTest
     public void setUp() {
         if (System.getProperty("os.name").contains("nux")) {
+            System.out.println(System.getProperty("os.name"));
             StringJoiner pathToChromeDriver = new StringJoiner(File.separator);
             String path = pathToChromeDriver.add("src").add("main").add("resources").add("webdriwers").add("chromedriver").toString();
             System.setProperty("webdriver.chrome.driver", path);
