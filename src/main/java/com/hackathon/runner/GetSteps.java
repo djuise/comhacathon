@@ -8,10 +8,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+import static com.hackathon.runner.Constants.SCENARIO_EXTENSION;
+
 class GetSteps {
     static List<String> getStringSteps(String fileName) {
         String defaultFolder = "scenarios/";
-        String path = defaultFolder + fileName + ".sc";
+        String path = defaultFolder + fileName + SCENARIO_EXTENSION;
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         List<String> steps = new LinkedList<>();
 

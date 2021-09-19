@@ -23,7 +23,7 @@ public class TestConfig extends SeleniumConfiguration {
 
     @AfterTest
     public void tearDown() {
-        driver.get().close();
+        driver.get().quit();
     }
 
     @Override

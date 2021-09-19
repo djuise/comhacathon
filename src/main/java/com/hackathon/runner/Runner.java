@@ -3,27 +3,47 @@ package com.hackathon.runner;
 import com.hackathon.helpers.BaseTest;
 import com.hackathon.runner.annotations.AfterTestImpl;
 import com.hackathon.runner.annotations.BeforeTestImpl;
+import com.hackathon.runner.exeptions.StepNotFoundException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Runner {
+public class Runner<T extends BaseTest> implements Runnable {
 
-    public <T extends BaseTest> void run(T test) {
-        List<String> steps = GetSteps.getStringSteps(test.scenario);
+    private T test;
+    private List<String> steps;
+
+    public Runner(T test) {
+        this.test = test;
+        steps = GetSteps.getStringSteps(test.scenario);
+    }
+
+    @Override
+    public void run() {
         BeforeTestImpl.setUp(test.getClass());
-        run(steps, test.classesList);
+        runTest();
         AfterTestImpl.tearDown(test.getClass());
     }
 
-    private void run(List<String> steps, List<Class> stepsClasses) {
-        List<Step> stepList = new FindSteps().getSteps(steps, stepsClasses);
+    private void runTest() {
+        try {
+            List<Step> stepList = new FindSteps().getSteps(steps, test.classesList, test.scenario);
+            runTest(stepList);
+        } catch (StepNotFoundException e) {
+            e.printStackTrace();
+            AfterTestImpl.tearDown(test.getClass());
+            Thread.currentThread().interrupt();
+        }
+    }
+
+    private void runTest(List<Step> stepList) {
         for (Step step : stepList) {
             try {
                 runWithArguments(step);
             } catch (IllegalAccessException | InvocationTargetException | InstantiationException e) {
                 e.printStackTrace();
+                AfterTestImpl.tearDown(test.getClass());
                 Thread.currentThread().interrupt();
             }
         }

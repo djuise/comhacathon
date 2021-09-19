@@ -2,12 +2,15 @@ package com.hackathon.runner;
 
 import com.hackathon.runner.annotations.Action;
 import com.hackathon.runner.annotations.Check;
+import com.hackathon.runner.exeptions.StepNotFoundException;
 import javafx.util.Pair;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
+
+import static com.hackathon.runner.Constants.SCENARIO_EXTENSION;
 
 class FindSteps {
 
@@ -17,16 +20,16 @@ class FindSteps {
     private List<Class> classes;
     private Step step = null;
 
-    List<Step> getSteps(List<String> stepsNames, List<Class> classes) {
+    List<Step> getSteps(List<String> stepsNames, List<Class> classes, String scenario) throws StepNotFoundException {
         List<Step> stepsList = new LinkedList<>();
         for(String step: stepsNames) {
-            stepsList.add(getStep(step, classes));
+            stepsList.add(getStep(step, classes, scenario));
         }
 
         return stepsList;
     }
 
-    private Step getStep(String stepName, List<Class> classes) {
+    private Step getStep(String stepName, List<Class> classes, String scenario) throws StepNotFoundException {
         this.classes = classes;
         setPrefix(stepName);
         String stepWithoutPrefix = splitStepName(stepName);
@@ -34,14 +37,14 @@ class FindSteps {
         List<Pair<Method, Class>> pairStepList = getMethods();
 
         if (prefix == null) {
-            Exception e = new Exception("Step \"" + stepName + "\" has wrong start.");
+            Exception e = new StepNotFoundException("Step \"" + stepName + "\" in file: \"" + scenario + SCENARIO_EXTENSION + "\" has wrong start.");
             e.printStackTrace();
             Thread.currentThread().interrupt();
         }
 
         assert pairStepList != null;
 
-        checkCountOfMethods(pairStepList, step.getName());
+        checkCountOfMethods(pairStepList, step.getName(), scenario);
 
         step.setMethod(pairStepList.get(0).getKey());
         step.setClazz(pairStepList.get(0).getValue());
@@ -95,16 +98,15 @@ class FindSteps {
         return methodList;
     }
 
-    private void checkCountOfMethods(List<Pair<Method, Class>> methodList, String step) {
+    private void checkCountOfMethods(List<Pair<Method, Class>> methodList, String step, String scenario) throws StepNotFoundException {
         if (methodList.size() == 0) {
-            Exception e = new Exception("Step \"" + step + "\" not found.");
-            e.printStackTrace();
+            StepNotFoundException e = new StepNotFoundException("Step \"" + step + "\" for scenario: \"" + scenario + SCENARIO_EXTENSION + "\" not found.");
 
-            System.exit(1);
+            throw e;
         }
 
         if (methodList.size() > 1) {
-            Exception e = new Exception("Step \"" + step + "\" has more than one implementation.");
+            Exception e = new StepNotFoundException("Step \"" + step + "\" has more than one implementation.");
             e.printStackTrace();
             Thread.currentThread().interrupt();
         }

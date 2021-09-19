@@ -19,9 +19,4 @@ public class BaseTest extends TestConfig {
         this.scenario = folder + scenario;
         this.classesList = classesList;
     }
-
-
-    public void test() {
-        System.out.println("ASD");
-    }
 }
