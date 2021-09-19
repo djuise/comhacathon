@@ -26,35 +26,21 @@ public class Runner<T extends BaseTest> implements Runnable {
     @SneakyThrows
     @Override
     public void run() {
-        logger.info("Started: " + test.getScenario());
+        logger.info("Test started: " + test.getClass().getName());
         runTest();
         AfterTestImpl.tearDown(test.getClass());
-        logger.info("Passed: " + test.getScenario());
+        logger.info("Test passed: " + test.getClass().getName());
     }
 
     private void runTest() throws StepNotFoundException, IllegalAccessException, InstantiationException, InvocationTargetException {
-//        try {
-            List<Step> stepList = new FindSteps().getSteps(steps, test.getClassesList(), test.getScenario());
-            BeforeTestImpl.setUp(test.getClass());
-            runTest(stepList);
-//        } catch (Exception e) {
-//            Thread.currentThread().interrupt();
-//            logger.error("Failed: " + test.getScenario());
-//            e.printStackTrace();
-//            AfterTestImpl.tearDown(test.getClass());
-//        }
+        List<Step> stepList = new FindSteps().getSteps(steps, test.getClassesList(), test.getScenario());
+        BeforeTestImpl.setUp(test.getClass());
+        runTest(stepList);
     }
 
     private void runTest(List<Step> stepList) throws IllegalAccessException, InvocationTargetException, InstantiationException {
         for (Step step : stepList) {
-//            try {
-                runWithArguments(step);
-//            } catch (IllegalAccessException | InvocationTargetException | InstantiationException e) {
-//                logger.error("Failed: " + test.getScenario());
-//                e.printStackTrace();
-//                AfterTestImpl.tearDown(test.getClass());
-//                Thread.currentThread().interrupt();
-//            }
+            runWithArguments(step);
         }
     }
 

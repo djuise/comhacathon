@@ -1,12 +1,15 @@
 package hackaton.runner;
 
 
+import hackaton.Logger.Logger;
 import hackaton.helpers.BaseTest;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ParallelRunner {
+
+    private Logger logger = new Logger();
 
     public static void run (String[] args) {
         ParallelRunner runner = new ParallelRunner();
@@ -29,6 +32,7 @@ public class ParallelRunner {
                     threadList.add(thread);
                 } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
                     status = 1;
+                    logger.error("Test failed: " + arguments.classList.get(i));
                     e.printStackTrace();
                 }
             }
