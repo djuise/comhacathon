@@ -15,7 +15,7 @@ public class TestConfig extends SeleniumConfiguration {
     public void setUp() {
         WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--ignore-ssl-errors=yes", "--ignore-certificate-errors", "--disable-dev-shm-usage");
+        options.addArguments("--ignore-ssl-errors=yes", "--ignore-certificate-errors", "--disable-dev-shm-usage", "--headless", "--no-sandbox");
         driver.set(new ChromeDriver(options));
         driver.get().get("https://apparel-uk.local:9002/ucstorefront/en/");
         driver.get().manage().window().maximize();
