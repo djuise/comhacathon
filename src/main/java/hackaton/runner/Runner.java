@@ -5,6 +5,8 @@ import hackaton.Logger.Logger;
 import hackaton.helpers.BaseTest;
 import hackaton.runner.annotations.AfterTestImpl;
 import hackaton.runner.annotations.BeforeTestImpl;
+import hackaton.runner.exeptions.StepNotFoundException;
+import lombok.SneakyThrows;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
@@ -21,6 +23,7 @@ public class Runner<T extends BaseTest> implements Runnable {
         steps = GetSteps.getStringSteps(test.getScenario());
     }
 
+    @SneakyThrows
     @Override
     public void run() {
         logger.info("Started: " + test.getScenario());
@@ -29,29 +32,29 @@ public class Runner<T extends BaseTest> implements Runnable {
         logger.info("Passed: " + test.getScenario());
     }
 
-    private void runTest() {
-        try {
+    private void runTest() throws StepNotFoundException, IllegalAccessException, InstantiationException, InvocationTargetException {
+//        try {
             List<Step> stepList = new FindSteps().getSteps(steps, test.getClassesList(), test.getScenario());
             BeforeTestImpl.setUp(test.getClass());
             runTest(stepList);
-        } catch (Exception e) {
-            Thread.currentThread().interrupt();
-            logger.error("Failed: " + test.getScenario());
-            e.printStackTrace();
-            AfterTestImpl.tearDown(test.getClass());
-        }
+//        } catch (Exception e) {
+//            Thread.currentThread().interrupt();
+//            logger.error("Failed: " + test.getScenario());
+//            e.printStackTrace();
+//            AfterTestImpl.tearDown(test.getClass());
+//        }
     }
 
-    private void runTest(List<Step> stepList) {
+    private void runTest(List<Step> stepList) throws IllegalAccessException, InvocationTargetException, InstantiationException {
         for (Step step : stepList) {
-            try {
+//            try {
                 runWithArguments(step);
-            } catch (IllegalAccessException | InvocationTargetException | InstantiationException e) {
-                logger.error("Failed: " + test.getScenario());
-                e.printStackTrace();
-                AfterTestImpl.tearDown(test.getClass());
-                Thread.currentThread().interrupt();
-            }
+//            } catch (IllegalAccessException | InvocationTargetException | InstantiationException e) {
+//                logger.error("Failed: " + test.getScenario());
+//                e.printStackTrace();
+//                AfterTestImpl.tearDown(test.getClass());
+//                Thread.currentThread().interrupt();
+//            }
         }
     }
 
