@@ -5,7 +5,10 @@ import hackaton.helpers.TestConfig;
 import hackaton.runner.annotations.Action;
 import hackaton.runner.annotations.Check;
 import hackaton.screens.MainPage;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class MainPageSteps extends TestConfig {
 
@@ -14,6 +17,7 @@ public class MainPageSteps extends TestConfig {
     public void navigateToSignInPage() {
         Logger log = new Logger();
         MainPage mainPage = new MainPage(driver.get());
+        System.out.println(mainPage.getSignInBtn().isDisplayed());
         mainPage.getSignInBtn().click();
         log.info("Login page is opened");
     }

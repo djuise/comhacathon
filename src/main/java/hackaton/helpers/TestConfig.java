@@ -8,6 +8,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
+import java.io.File;
+import java.util.StringJoiner;
 import java.util.concurrent.TimeUnit;
 
 public class TestConfig extends SeleniumConfiguration {
@@ -15,7 +17,13 @@ public class TestConfig extends SeleniumConfiguration {
 
     @BeforeTest
     public void setUp() {
-        WebDriverManager.chromedriver().setup();
+        if (System.getProperty("os.name").contains("nux")) {
+            StringJoiner pathToChromeDriver = new StringJoiner(File.separator);
+            String path = pathToChromeDriver.add("src").add("main").add("resources").add("webdriwers").add("chromedriver").toString();
+            System.setProperty("webdriver.chrome.driver", path);
+        }
+        else
+            WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--ignore-ssl-errors=yes", "--ignore-certificate-errors", "--disable-dev-shm-usage", "--no-sandbox");
         driver.set(new ChromeDriver(options));
