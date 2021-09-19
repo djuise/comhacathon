@@ -9,14 +9,8 @@ import hackaton.runner.ParallelRunner;
  */
 public class RunTests {
     public static void main(String[] args) {
-
         // args should contains value of threads count and class names (with own/full package name)
-        // For example {"2", "tests.RunBannerTest", "tests.RunNegativeLoginTest"}
-        // Not works with maven yet
-//        ParallelRunner.run(args);
-
-        // For debuging
-        String[] s = new String[]{"2", "tests.RunBannerTest", "tests.RunNegativeLoginTest"};
-        ParallelRunner.run(s);
+        // mvn clean install exec:java -Dexec.mainClass=hackaton.RunTests -Dexec.args="2 tests.RunNegativeLoginTest tests.RunNegativeLoginTest"
+        ParallelRunner.run(args);
     }
 }
