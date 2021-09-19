@@ -8,6 +8,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
+import java.util.concurrent.TimeUnit;
+
 public class TestConfig extends SeleniumConfiguration {
     protected static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
 
@@ -19,6 +21,7 @@ public class TestConfig extends SeleniumConfiguration {
         driver.set(new ChromeDriver(options));
         driver.get().get("https://apparel-uk.local:9002/ucstorefront/en/");
         driver.get().manage().window().maximize();
+        driver.get().manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
 
     @AfterTest
