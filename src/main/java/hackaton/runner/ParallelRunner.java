@@ -10,10 +10,10 @@ import java.util.List;
 public class ParallelRunner {
 
     private Logger logger = new Logger();
-    static ThreadLocal<Integer> status = new ThreadLocal();
+    private List<Runner> runnerList = new ArrayList<>();
+    private int status = 0;
 
     public static void run (String[] args) {
-        status.set(0);
         ParallelRunner runner = new ParallelRunner();
         Arguments arguments = new Arguments(args);
         runner.run(arguments);
@@ -21,7 +21,6 @@ public class ParallelRunner {
 
     private void run(Arguments arguments) {
         List<Thread> threadList = new ArrayList<>();
-        List<Runner> runnerList = new ArrayList<>();
         while (arguments.classList.size() > 0) {
             int countOfThreads = arguments.getThreadCount() < arguments.classList.size() ? arguments.getThreadCount() : arguments.classList.size();
             for (int i = 0; i < countOfThreads; countOfThreads--) {
@@ -34,7 +33,7 @@ public class ParallelRunner {
                     Thread thread = new Thread(runner);
                     threadList.add(thread);
                 } catch (Exception e) {
-                    status.set(1);
+                    status = 1;
                     logger.error("Test failed: " + arguments.classList.get(i));
                     e.printStackTrace();
                 }
@@ -47,10 +46,14 @@ public class ParallelRunner {
                 for (Thread thread: threadList)
                     thread.join();
             } catch (InterruptedException e) {
-                status.set(1);
+                status = 1;
                 e.printStackTrace();
             }
         }
-        System.exit(status.get());
+        for (Runner runner: runnerList)
+            if (runner.status == 1)
+                status = runner.status;
+
+        System.exit(status);
     }
 }

@@ -6,7 +6,6 @@ import hackaton.helpers.BaseTest;
 import hackaton.runner.annotations.AfterTestImpl;
 import hackaton.runner.annotations.BeforeTestImpl;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,6 +14,7 @@ public class Runner<T extends BaseTest> implements Runnable {
     private T test;
     private List<String> steps;
     private Logger logger = new Logger();
+    int status = 0;
 
     Runner(T test) {
         this.test = test;
@@ -26,7 +26,6 @@ public class Runner<T extends BaseTest> implements Runnable {
         logger.info("Test started: " + test.getScenario());
         runTest();
         AfterTestImpl.tearDown(test.getClass());
-        logger.info("Test passed: " + test.getScenario());
     }
 
     private void runTest() {
@@ -34,11 +33,12 @@ public class Runner<T extends BaseTest> implements Runnable {
             List<Step> stepList = new FindSteps().getSteps(steps, test.getClassesList(), test.getScenario());
             BeforeTestImpl.setUp(test.getClass());
             runTest(stepList);
+            logger.info("Test passed: " + test.getScenario());
         } catch (Exception e) {
             Thread.currentThread().interrupt();
             logger.error("Failed: " + test.getScenario());
             e.printStackTrace();
-            ParallelRunner.status.set(1);
+            status = 1;
         }
     }
 
