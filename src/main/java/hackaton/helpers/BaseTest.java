@@ -15,6 +15,7 @@ public class BaseTest extends TestConfig {
         this.classesList = classesList;
     }
 
+    @SuppressWarnings("unused")
     public BaseTest(String scenario, List<Class> classesList, String folder) {
         this.scenario = folder + scenario;
         this.classesList = classesList;

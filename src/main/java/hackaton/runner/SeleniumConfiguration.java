@@ -10,7 +10,9 @@ abstract public class SeleniumConfiguration {
         }
     }
 
+    @SuppressWarnings({"unused", "ussing by childs"})
     abstract public void setUp();
+    @SuppressWarnings({"unused", "ussing by childs"})
     abstract public void tearDown();
 
 }

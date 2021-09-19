@@ -14,6 +14,8 @@ public class Logger {
     public void error(String message) {
         format(type[0],message);
     }
+
+    @SuppressWarnings("unused")
     public void warn(String message) {
         format(type[1],message);
     }
@@ -21,8 +23,6 @@ public class Logger {
     public void info(String message) {
         format(type[2],message);
     }
-
-
 
     private void format(String type, String message) {
 

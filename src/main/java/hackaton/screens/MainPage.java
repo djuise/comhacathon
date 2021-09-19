@@ -14,12 +14,16 @@ public class MainPage extends BaseScreen {
             super(driver);
     }
 
-    @FindBy(id = "js-site-search-input") @Getter
+    @Getter
+    @FindBy(id = "js-site-search-input")
     private WebElement searchField;
-    @FindBy(xpath = "//a[@href='/ucstorefront/en/login']") @Getter
+    @Getter
+    @FindBy(xpath = "//a[@href='/ucstorefront/en/login']")
     private WebElement signInBtn;
-    @FindBy(css = "[class='myAccountLinksHeader js-myAccount-toggle']") @Getter
+    @Getter
+    @FindBy(css = "[class='myAccountLinksHeader js-myAccount-toggle']")
     private WebElement myAccountBtn;
-    @FindBy(css = "[class='js-responsive-image']") @Getter
+    @Getter
+    @FindBy(css = "[class='js-responsive-image']")
     private List<WebElement> banners;
 }

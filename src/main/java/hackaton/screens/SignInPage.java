@@ -11,19 +11,16 @@ public class SignInPage extends BaseScreen {
         super(driver);
     }
 
+    @Getter
     @FindBy(id = "j_username")
-    @Getter
     private WebElement signInEmailField;
-
+    @Getter
     @FindBy(id = "j_password")
-    @Getter
     private WebElement signInPasswordField;
-
+    @Getter
     @FindBy(css = "[id='loginForm'] button[type='submit']")
-    @Getter
     private WebElement signInBtn;
-
-    @FindBy(css = "[class='alert alert-danger alert-dismissable getAccAlert']")
     @Getter
+    @FindBy(css = "[class='alert alert-danger alert-dismissable getAccAlert']")
     private WebElement signInError;
 }
