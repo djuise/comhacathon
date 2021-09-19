@@ -21,7 +21,7 @@ public class TestConfig extends SeleniumConfiguration {
         options.setExperimentalOption("useAutomationExtension", false);
         driver.set(new ChromeDriver(options));
         driver.get().get("https://apparel-uk.local:9002/ucstorefront/en/");
-        driver.get().manage().window().maximize();
+//        driver.get().manage().window().maximize();
         driver.get().manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
 
