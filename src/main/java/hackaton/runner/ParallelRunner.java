@@ -30,7 +30,7 @@ public class ParallelRunner {
                     Runnable runnable = new Runner<>(clazz);
                     Thread thread = new Thread(runnable);
                     threadList.add(thread);
-                } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+                } catch (Exception e) {
                     status = 1;
                     logger.error("Test failed: " + arguments.classList.get(i));
                     e.printStackTrace();
