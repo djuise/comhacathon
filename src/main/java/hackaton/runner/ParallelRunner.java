@@ -20,6 +20,7 @@ public class ParallelRunner {
     private void run(Arguments arguments) {
         int status = 0;
         List<Thread> threadList = new ArrayList<>();
+        List<Runner> runnerList = new ArrayList<>();
         while (arguments.classList.size() > 0) {
             int countOfThreads = arguments.getThreadCount() < arguments.classList.size() ? arguments.getThreadCount() : arguments.classList.size();
             for (int i = 0; i < countOfThreads; countOfThreads--) {
@@ -27,8 +28,9 @@ public class ParallelRunner {
                     String className = arguments.classList.get(i);
                     arguments.classList.remove(className);
                     BaseTest clazz = (BaseTest) Class.forName(className).newInstance();
-                    Runner runnable = new Runner<>(clazz);
-                    Thread thread = new Thread(runnable);
+                    Runner runner = new Runner<>(clazz);
+                    runnerList.add(runner);
+                    Thread thread = new Thread(runner);
                     threadList.add(thread);
                 } catch (Exception e) {
                     status = 1;
@@ -47,6 +49,11 @@ public class ParallelRunner {
                 status = 1;
                 e.printStackTrace();
             }
+        }
+
+        for (Runner runner: runnerList) {
+            if (runner.getStatus() == 1)
+                status = 1;
         }
         System.exit(status);
     }
